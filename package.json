@@ -1,0 +1,44 @@
+{
+  "name": "@npi-ai/browser-utils",
+  "version": "0.0.1",
+  "description": "Browser utilities for NPi",
+  "type": "module",
+  "files": [
+    "dist",
+    "package.json",
+    "README.md",
+    "LICENSE"
+  ],
+  "exports": {
+    ".": {
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsup"
+  },
+  "keywords": [
+    "autonomous agent",
+    "llm",
+    "grounding"
+  ],
+  "author": "npi",
+  "license": "BSL-1.1",
+  "dependencies": {
+    "dom-accessibility-api": "^0.6.3"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^7.6.0",
+    "@typescript-eslint/parser": "^7.6.0",
+    "esbuild-plugin-umd-wrapper": "^2.0.0",
+    "eslint": "^9.0.0",
+    "prettier": "^3.2.5",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.5"
+  }
+}
