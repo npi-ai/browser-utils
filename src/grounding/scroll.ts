@@ -35,7 +35,7 @@ export function scrollPageDown() {
 
 export function isScrollablePage() {
   return (
-    getScrollableParent(document.body) !== null &&
+    // getScrollableParent(document.body) !== null &&
     Math.ceil(getScrollTop() + window.innerHeight) < getPageHeight()
   );
 }
