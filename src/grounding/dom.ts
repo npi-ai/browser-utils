@@ -92,7 +92,10 @@ export function isVisibleForUser(el: Element) {
   return false;
 }
 
-export async function getInteractiveElements(selector = defaultSelector) {
+export async function getInteractiveElements(
+  selector = defaultSelector,
+  fullPage = false,
+) {
   const { innerWidth, innerHeight } = window;
 
   // use inner-most elements to reduce noise
@@ -146,9 +149,15 @@ export async function getInteractiveElements(selector = defaultSelector) {
         return false;
       }
 
-      const scrollableParent = getScrollableParent(el);
+      // keep all elements if fullPage is true
+      if (fullPage) {
+        return true;
+      }
 
       // keep elements inside a scrollable container except the documentElement
+
+      const scrollableParent = getScrollableParent(el);
+
       if (
         scrollableParent &&
         scrollableParent !== document.documentElement &&

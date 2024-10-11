@@ -4,6 +4,8 @@ import {
   computeAccessibleDescription,
 } from 'dom-accessibility-api';
 
+import { finder } from '@medv/finder';
+
 import {
   defaultSelector,
   markerAttr,
@@ -41,6 +43,8 @@ export class BrowserUtils {
   #prevElements: Element[] = [];
   #observer: Observer | null = null;
 
+  readonly getUniqueSelector = finder;
+
   constructor(readonly selector: string = defaultSelector) {}
 
   getElement(id: string): HTMLElement {
@@ -53,8 +57,11 @@ export class BrowserUtils {
     return document.querySelector(`[data-marker-id="${id}"]`) as HTMLElement;
   }
 
-  async addBboxes() {
-    const interactiveElements = await getInteractiveElements(this.selector);
+  async addBboxes(fullPage?: boolean) {
+    const interactiveElements = await getInteractiveElements(
+      this.selector,
+      fullPage,
+    );
     addBboxes(interactiveElements);
   }
 
@@ -106,13 +113,16 @@ export class BrowserUtils {
     return elemJSON;
   }
 
-  async snapshot(screenshot?: string) {
+  async snapshot(screenshot?: string, fullPage?: boolean) {
     this.clearBboxes();
 
     const addedIDs = new Set<string>();
     const prevElemSet = new Set(this.#prevElements);
 
-    const interactiveElements = await getInteractiveElements(this.selector);
+    const interactiveElements = await getInteractiveElements(
+      this.selector,
+      fullPage,
+    );
     const pageBrightness = await getPageBrightness(screenshot);
 
     const elementsAsJSON: ElementJSON[] = interactiveElements.map((el, i) => {
