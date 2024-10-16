@@ -19,6 +19,7 @@ import {
   scrollPageDown,
   isContenteditable,
   isScrollablePage,
+  selectorUtils,
 } from './grounding';
 
 import {
@@ -43,7 +44,11 @@ export class BrowserUtils {
   #prevElements: Element[] = [];
   #observer: Observer | null = null;
 
+  static readonly getUniqueSelector = finder;
+  static readonly selectorUtils = selectorUtils;
+
   readonly getUniqueSelector = finder;
+  readonly selectorUtils = selectorUtils;
 
   constructor(readonly selector: string = defaultSelector) {}
 
