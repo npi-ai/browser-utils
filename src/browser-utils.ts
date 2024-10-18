@@ -168,7 +168,7 @@ export class BrowserUtils {
     // used for retrieving elements later
     this.#prevElements = [];
 
-    return mostContentful.flatMap(([el]) => {
+    return mostContentful.flatMap(([el], i) => {
       const brightness = randomBrightness(pageBrightness);
 
       const bgColor = `hsl(${(Math.random() * 360) | 0}, ${
@@ -194,6 +194,7 @@ export class BrowserUtils {
 
           return {
             id: id,
+            groupId: i,
             html: child.outerHTML,
           };
         });
