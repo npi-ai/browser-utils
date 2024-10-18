@@ -1,5 +1,9 @@
 export function isContentlessEl(el: Element) {
-  if (/^body|head|html|script|noscript|style|select|form$/i.test(el.tagName)) {
+  if (
+    /^body|head|html|script|noscript|style|select|form|iframe$/i.test(
+      el.tagName,
+    )
+  ) {
     return true;
   }
 
@@ -18,7 +22,7 @@ export function getMostContentfulElements(
 ): [Element, MostFrequentChildren][] {
   const childrenCountMap = new Map<Element, MostFrequentChildren>();
 
-  [...document.all].forEach(el => {
+  [...document.body.querySelectorAll('*')].forEach(el => {
     if (isContentlessEl(el)) {
       return;
     }
