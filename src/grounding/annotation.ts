@@ -49,20 +49,38 @@ function getZindex(el: Element | null) {
   return isFinite(zIndex) ? zIndex.toString() : 'auto';
 }
 
-export function markElement(el: Element, id: number, pageBrightness: number) {
+export function markElement({
+  el,
+  id,
+  pageBrightness,
+  bgColor,
+  textColor,
+}: {
+  el: Element;
+  id: number;
+  pageBrightness: number;
+  bgColor?: string;
+  textColor?: string;
+}) {
   ensureStyle();
 
   const scrollTop = getScrollTop();
   const rects = el.getClientRects();
 
   const brightness = randomBrightness(pageBrightness);
-  const bgColor = `hsl(${(Math.random() * 360) | 0}, ${
-    (Math.random() * 100) | 0
-  }%, ${brightness}%)`;
-  const textColor = isDark(pageBrightness) ? '#000' : '#fff';
   // const bgColor = 'red';
   // const textColor = '#fff';
   const zIndex = getZindex(el);
+
+  if (!bgColor) {
+    bgColor = `hsl(${(Math.random() * 360) | 0}, ${
+      (Math.random() * 100) | 0
+    }%, ${brightness}%)`;
+  }
+
+  if (!textColor) {
+    textColor = isDark(pageBrightness) ? '#000' : '#fff';
+  }
 
   for (const rect of rects) {
     if (rect.width === 0 || rect.height === 0) {
@@ -110,7 +128,11 @@ export async function addBboxes(elements: Element[], screenshot?: string) {
   const pageBrightness = await getPageBrightness(screenshot);
 
   elements.forEach((el, i) => {
-    markElement(el, i, pageBrightness);
+    markElement({
+      id: i,
+      el,
+      pageBrightness,
+    });
   });
 
   return elements;

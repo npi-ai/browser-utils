@@ -20,6 +20,10 @@ import {
   isContenteditable,
   isScrollablePage,
   selectorUtils,
+  isContentlessEl,
+  getMostContentfulElements,
+  randomBrightness,
+  isDark,
 } from './grounding';
 
 import {
@@ -124,14 +128,15 @@ export class BrowserUtils {
     const addedIDs = new Set<string>();
     const prevElemSet = new Set(this.#prevElements);
 
-    const interactiveElements = await getInteractiveElements(
-      this.selector,
-      fullPage,
-    );
+    const interactiveElements = getInteractiveElements(this.selector, fullPage);
     const pageBrightness = await getPageBrightness(screenshot);
 
     const elementsAsJSON: ElementJSON[] = interactiveElements.map((el, i) => {
-      markElement(el, i, pageBrightness);
+      markElement({
+        id: i,
+        el,
+        pageBrightness,
+      });
 
       const markerId = el.getAttribute(markerAttr);
 
@@ -153,6 +158,44 @@ export class BrowserUtils {
       elementsAsJSON,
       addedIDs: [...addedIDs],
     };
+  }
+
+  async getMostContentfulElements(screenshot?: string, topN: number = 3) {
+    this.clearBboxes();
+
+    const pageBrightness = await getPageBrightness(screenshot);
+    const mostContentful = getMostContentfulElements(topN);
+
+    let id = 0;
+
+    return mostContentful.flatMap(([el]) => {
+      const brightness = randomBrightness(pageBrightness);
+
+      const bgColor = `hsl(${(Math.random() * 360) | 0}, ${
+        (Math.random() * 100) | 0
+      }%, ${brightness}%)`;
+
+      const textColor = isDark(pageBrightness) ? '#000' : '#fff';
+
+      return [...el.children]
+        .filter(child => !isContentlessEl(child))
+        .map(child => {
+          markElement({
+            el: child,
+            id,
+            pageBrightness,
+            bgColor,
+            textColor,
+          });
+
+          id++;
+
+          return {
+            id: id,
+            html: child.outerHTML,
+          };
+        });
+    });
   }
 
   initObserver(maxTimeout?: number) {

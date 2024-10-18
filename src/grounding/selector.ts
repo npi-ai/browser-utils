@@ -248,7 +248,7 @@ export function expandAnchorFrom(fromElem: Element): [Element, Element] | null {
     }
   }
 
-  if (bestItemSelector && bestMatches) {
+  if (bestItemSelector && bestMatches && bestMatches.size > 1) {
     const matches = [...bestMatches];
     const index = matches.findIndex(el => el.contains(fromElem));
 

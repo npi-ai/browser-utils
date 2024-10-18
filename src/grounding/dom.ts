@@ -20,7 +20,7 @@ export function hasA11yInfo(el: Element) {
   return !!(computeAccessibleName(el) || computeAccessibleDescription(el));
 }
 
-export async function getClickableElements(): Promise<Set<Element>> {
+export function getClickableElements(): Set<Element> {
   const result = new Set<Element>();
 
   const elements = document.querySelectorAll('*');
@@ -92,14 +92,14 @@ export function isVisibleForUser(el: Element) {
   return false;
 }
 
-export async function getInteractiveElements(
+export function getInteractiveElements(
   selector = defaultSelector,
   fullPage = false,
 ) {
   const { innerWidth, innerHeight } = window;
 
   // use inner-most elements to reduce noise
-  const clickableElements = getInnerMostElements(await getClickableElements());
+  const clickableElements = getInnerMostElements(getClickableElements());
   // TODO: not necessary to get inner-most elements for selector matches?
   const baseElements = new Set(
     [...document.querySelectorAll(selector)].filter(el => {
