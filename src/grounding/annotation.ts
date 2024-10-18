@@ -18,7 +18,7 @@ function ensureStyle() {
     }
 
     .lc-marker::before {
-      content: attr(data-marker-id);
+      content: attr(data-element-id);
       position: absolute;
       /* bottom: 100%; */
       /* left: -1px; */

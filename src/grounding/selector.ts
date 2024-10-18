@@ -152,19 +152,19 @@ export function getCommonSelector(
   // simplify selectors
   for (let i = selectors.length - 1; i >= 0; i--) {
     const selector = selectors.join('');
-    const matched = root.querySelectorAll(selector);
+    const matched = root.querySelectorAll('& > ' + selector);
 
     if (!lastMatchedCount) {
       lastMatchedCount = matched.length;
     }
 
     if (!matched.length || matched.length !== lastMatchedCount) {
-      return selectors.slice(0, i + 2).join('');
+      return '> ' + selectors.slice(0, i + 2).join('');
     }
   }
 
   // return the first selector as it is enough to identify the element
-  return selectors[0];
+  return '> ' + selectors[0];
 }
 
 export type ElementFeatures = {
