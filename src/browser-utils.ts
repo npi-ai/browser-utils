@@ -168,7 +168,7 @@ export class BrowserUtils {
     // used for retrieving elements later
     this.#prevElements = [];
 
-    return mostContentful.flatMap(([el], i) => {
+    return mostContentful.flatMap(([el, mostFrequentChildren], i) => {
       const brightness = randomBrightness(pageBrightness);
 
       const bgColor = `hsl(${(Math.random() * 360) | 0}, ${
@@ -178,7 +178,12 @@ export class BrowserUtils {
       const textColor = isDark(pageBrightness) ? '#000' : '#fff';
 
       return [...el.children]
-        .filter(child => !isContentlessEl(child))
+        .filter(child => {
+          return (
+            child.tagName === mostFrequentChildren.tagName &&
+            !isContentlessEl(child)
+          );
+        })
         .map(child => {
           markElement({
             el: child,
@@ -188,15 +193,17 @@ export class BrowserUtils {
             textColor,
           });
 
-          id++;
-
           this.#prevElements.push(child);
 
-          return {
+          const data = {
             id: id,
             groupId: i,
             html: child.outerHTML,
           };
+
+          id++;
+
+          return data;
         });
     });
   }

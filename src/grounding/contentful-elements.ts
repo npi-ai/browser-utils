@@ -8,10 +8,15 @@ export function isContentlessEl(el: Element) {
   return rect.width === 0 || rect.height === 0;
 }
 
+export type MostFrequentChildren = {
+  tagName: string | null;
+  count: number;
+};
+
 export function getMostContentfulElements(
   topN: number = 3,
-): [Element, number][] {
-  const childrenCountMap = new Map<Element, number>();
+): [Element, MostFrequentChildren][] {
+  const childrenCountMap = new Map<Element, MostFrequentChildren>();
 
   [...document.all].forEach(el => {
     if (isContentlessEl(el)) {
@@ -41,11 +46,16 @@ export function getMostContentfulElements(
       (a, b) => b[1] - a[1],
     )[0];
 
-    childrenCountMap.set(el, mostCommonTag ? mostCommonTag[1] : 0);
+    childrenCountMap.set(
+      el,
+      mostCommonTag
+        ? { tagName: mostCommonTag[0], count: mostCommonTag[1] }
+        : { tagName: null, count: 0 },
+    );
   });
 
   // sort by children count
   return [...childrenCountMap.entries()]
-    .sort((a, b) => b[1] - a[1])
+    .sort((a, b) => b[1].count - a[1].count)
     .slice(0, topN);
 }
