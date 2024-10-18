@@ -45,16 +45,7 @@ export function getMostContentfulElements(
   });
 
   // sort by children count
-  const mostContentful = [...childrenCountMap.entries()]
+  return [...childrenCountMap.entries()]
     .sort((a, b) => b[1] - a[1])
-    .slice(0, topN * 2); // get more than topN to filter out inner elements
-
-  // keep only outermost elements
-  const outermost = mostContentful.filter(([el]) => {
-    return mostContentful.every(([otherEl]) => {
-      return el === otherEl || !otherEl.contains(el);
-    });
-  });
-
-  return outermost.slice(0, topN);
+    .slice(0, topN);
 }
