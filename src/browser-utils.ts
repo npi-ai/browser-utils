@@ -66,11 +66,8 @@ export class BrowserUtils {
     return document.querySelector(`[data-marker-id="${id}"]`) as HTMLElement;
   }
 
-  async addBboxes(fullPage?: boolean) {
-    const interactiveElements = await getInteractiveElements(
-      this.selector,
-      fullPage,
-    );
+  addBboxes(fullPage?: boolean) {
+    const interactiveElements = getInteractiveElements(this.selector, fullPage);
     addBboxes(interactiveElements);
   }
 
@@ -168,6 +165,9 @@ export class BrowserUtils {
 
     let id = 0;
 
+    // used for retrieving elements later
+    this.#prevElements = [];
+
     return mostContentful.flatMap(([el]) => {
       const brightness = randomBrightness(pageBrightness);
 
@@ -189,6 +189,8 @@ export class BrowserUtils {
           });
 
           id++;
+
+          this.#prevElements.push(child);
 
           return {
             id: id,

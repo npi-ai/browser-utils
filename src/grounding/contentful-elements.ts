@@ -1,5 +1,5 @@
 export function isContentlessEl(el: Element) {
-  return /^body|head|html|script|style|select|form$/i.test(el.tagName);
+  return /^body|head|html|script|noscript|style|select|form$/i.test(el.tagName);
 }
 
 export function getMostContentfulElements(

@@ -94,7 +94,9 @@ export function markElement({
     marker.style.width = rect.width + 'px';
     marker.style.height = rect.height + 'px';
     marker.style.zIndex = zIndex;
-    marker.setAttribute(markerAttr, id.toString());
+
+    el.setAttribute(markerAttr, id.toString());
+    marker.setAttribute('data-element-id', id.toString());
 
     marker.style.setProperty('--bg-color', bgColor);
     marker.style.setProperty('--text-color', textColor);
