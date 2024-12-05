@@ -76,6 +76,18 @@ export function getCommonAncestor(...els: Element[]): Element | null {
   return candidate;
 }
 
+export function getOutermostSelector(root: Element, selector: string): string {
+  const nestedChildren = root.querySelectorAll(`${selector} ${selector}`);
+
+  if (nestedChildren.length) {
+    // find elements that DO NOT have children matching the selector = innermost matches
+    return `${selector}:not(${selector} ${selector})`;
+  }
+
+  // no nested children = all elements are outermost
+  return selector;
+}
+
 export function getCommonSelector(
   root: Element,
   ...els: Element[]
@@ -151,20 +163,26 @@ export function getCommonSelector(
 
   // simplify selectors
   for (let i = selectors.length - 1; i >= 0; i--) {
-    const selector = selectors.join('');
-    const matched = root.querySelectorAll('& > ' + selector);
+    const selector = getOutermostSelector(
+      root,
+      selectors.slice(0, i + 1).join(''),
+    );
+    const matched = root.querySelectorAll(selector);
 
     if (!lastMatchedCount) {
       lastMatchedCount = matched.length;
     }
 
     if (!matched.length || matched.length !== lastMatchedCount) {
-      return '> ' + selectors.slice(0, i + 2).join('');
+      // use the last valid selector
+      return lastMatchedCount
+        ? getOutermostSelector(root, selectors.slice(0, i + 2).join(' '))
+        : null;
     }
   }
 
   // return the first selector as it is enough to identify the element
-  return '> ' + selectors[0];
+  return getOutermostSelector(root, selectors[0]);
 }
 
 export type ElementFeatures = {
