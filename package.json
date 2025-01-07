@@ -21,7 +21,8 @@
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "tsup"
+    "build": "tsup",
+    "release": "npm version patch && npm run build && npm publish --access public"
   },
   "keywords": [
     "autonomous agent",
