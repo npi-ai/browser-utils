@@ -108,7 +108,7 @@ export class BrowserUtils {
     // shorten url
     const href = el.getAttribute('href');
 
-    if (href) {
+    if (href && href.length > 100) {
       if (!elemJSON.accessibleName && !elemJSON.accessibleDescription) {
         elemJSON.attributes.href = href.slice(0, 100);
       } else {
