@@ -40,7 +40,7 @@ export type ElementJSON = {
   role: string | null;
   accessibleName: string;
   accessibleDescription: string;
-  attributes: Record<string, string>;
+  attributes: Record<string, string | number | boolean>;
   options?: string[];
 };
 
@@ -85,10 +85,17 @@ export class BrowserUtils {
       attributes: {},
     };
 
-    if (el.tagName === 'SELECT') {
+    if (el instanceof HTMLSelectElement) {
       elemJSON.options = [...el.querySelectorAll('option')].map(
         opt => (opt as HTMLOptionElement).value,
       );
+    }
+
+    if (
+      el instanceof HTMLInputElement &&
+      (el.type === 'radio' || el.type === 'checkbox')
+    ) {
+      elemJSON.attributes.checked = el.checked;
     }
 
     for (const attr of [...el.attributes]) {
