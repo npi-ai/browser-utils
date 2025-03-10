@@ -1,3 +1,6 @@
+import { isVisibleForUser } from './dom';
+import { isDisabled, isInaccessible } from 'dom-accessibility-api';
+
 export function isContentlessEl(el: Element) {
   if (
     /^body|head|html|script|noscript|style|select|form|iframe$/i.test(
@@ -9,7 +12,15 @@ export function isContentlessEl(el: Element) {
 
   const rect = el.getBoundingClientRect();
 
-  return rect.width === 0 || rect.height === 0;
+  if (rect.width === 0 || rect.height === 0) {
+    return true;
+  }
+
+  if (!isVisibleForUser(el)) {
+    return true;
+  }
+
+  return isDisabled(el) || isInaccessible(el);
 }
 
 export type MostFrequentChildren = {
