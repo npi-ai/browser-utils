@@ -20,14 +20,25 @@ function ensureStyle() {
     .lc-marker::before {
       content: attr(data-element-id);
       position: absolute;
-      /* bottom: 100%; */
-      /* left: -1px; */
-      top: 0;
-      left: 0;
-      padding: 0px 2px;
+      bottom: 100%;
+      left: -2px;
+      /* top: 0; */
+      /* left: 0; */
+      padding: 0px 1px;
       color: var(--text-color);
       background-color: var(--bg-color);
-      font-size: 12px;
+      font-size: 8px;
+    }
+
+    .lc-marker::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: var(--bg-color);
+      opacity: 0.1;
     }
   `;
   document.head.append(style);
