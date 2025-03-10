@@ -69,8 +69,23 @@ export function getMostContentfulElements(
     );
   });
 
-  // sort by children count
-  return [...childrenCountMap.entries()]
-    .sort((a, b) => b[1].count - a[1].count)
-    .slice(0, topN);
+  return (
+    [...childrenCountMap.entries()]
+      // sort by children count
+      .sort((a, b) => b[1].count - a[1].count)
+      .filter(([el, counter], _, candidates) => {
+        // if the parent has more common children, ignore the child
+        return !candidates.some(([parent, parentCounter]) => {
+          return (
+            parent !== el &&
+            parent.contains(el) &&
+            parentCounter.count > counter.count
+          );
+        });
+      })
+      .filter(([_, counter]) => {
+        return counter.count > 1;
+      })
+      .slice(0, topN)
+  );
 }
