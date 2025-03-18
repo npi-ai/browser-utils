@@ -1,4 +1,4 @@
-import { isVisibleForUser } from './dom';
+// import { isVisibleForUser } from './dom';
 import { isDisabled, isInaccessible } from 'dom-accessibility-api';
 
 export function isContentlessEl(el: Element) {
@@ -10,15 +10,13 @@ export function isContentlessEl(el: Element) {
     return true;
   }
 
-  const rect = el.getBoundingClientRect();
-
-  if (rect.width === 0 || rect.height === 0) {
+  if (el.scrollWidth === 0 || el.scrollHeight === 0) {
     return true;
   }
 
-  if (!isVisibleForUser(el)) {
-    return true;
-  }
+  // if (!isVisibleForUser(el)) {
+  //   return true;
+  // }
 
   return isDisabled(el) || isInaccessible(el);
 }
@@ -35,6 +33,7 @@ export function getMostContentfulElements(
 
   [...document.body.querySelectorAll('*')].forEach(el => {
     if (isContentlessEl(el)) {
+      console.log('contentless', el);
       return;
     }
 
@@ -42,6 +41,7 @@ export function getMostContentfulElements(
 
     for (const child of el.children) {
       if (isContentlessEl(child)) {
+        console.log('contentless', child);
         continue;
       }
 
