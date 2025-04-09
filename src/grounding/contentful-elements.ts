@@ -74,11 +74,13 @@ export function getMostContentfulElements(
       // sort by children count
       .sort((a, b) => b[1].count - a[1].count)
       .filter(([el, counter], _, candidates) => {
-        // if the parent has more common children, ignore the child
         return !candidates.some(([parent, parentCounter]) => {
+          // if the parent has more common children, ignore the child
+          // otherwise, ignore the parent
+
           return (
             parent !== el &&
-            parent.contains(el) &&
+            (parent.contains(el) || el.contains(parent)) &&
             parentCounter.count > counter.count
           );
         });
