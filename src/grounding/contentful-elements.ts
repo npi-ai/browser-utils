@@ -33,7 +33,6 @@ export function getMostContentfulElements(
 
   [...document.body.querySelectorAll('*')].forEach(el => {
     if (isContentlessEl(el)) {
-      console.log('contentless', el);
       return;
     }
 
@@ -41,7 +40,6 @@ export function getMostContentfulElements(
 
     for (const child of el.children) {
       if (isContentlessEl(child)) {
-        console.log('contentless', child);
         continue;
       }
 

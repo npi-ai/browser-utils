@@ -176,7 +176,7 @@ export function getCommonSelector(
     if (!matched.length || matched.length !== lastMatchedCount) {
       // use the last valid selector
       return lastMatchedCount
-        ? getOutermostSelector(root, selectors.slice(0, i + 2).join(' '))
+        ? getOutermostSelector(root, selectors.slice(0, i + 2).join(''))
         : null;
     }
   }
